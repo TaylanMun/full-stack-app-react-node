@@ -1,49 +1,67 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/context";
-import { useForm } from "../../hooks/useForm";
 
-export const SignInPage = (props) => {
-  const validation = (values) => {
-    let errors = {};
+export const UserSignIn = (props) => {
+  // initial state
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState(null);
 
-    if (!values.emailAddress) {
-      errors.emailAddress = "Email address is required.";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.emailAddress)) {
-      errors.emailAddress = "Email address is invalid.";
-    }
-
-    if (!values.password) {
-      errors.password = "Password is required.";
-    }
-    return errors;
+    // take input values
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
   };
 
-  const [apiError, setApiError] = useState(null);
-  const { values, errors, handleChange, handleSubmit } = useForm(
-    login,
-    validation
-  );
   const history = useHistory();
   const context = useContext(AuthContext);
 
-  function login() {
-    const { from } = props.location.state || { from: { pathname: "/" } };
-    context.actions
-      .signIn(values.emailAddress, values.password)
-      .then(() => history.push(from))
-      .catch((error) => {
-        if (error === 401) {
-          setApiError({
-            message:
-              "Your email addresss or password was entered incorrectly. Try again.",
-          });
-        } else {
-          history.push("/error");
-        }
-      });
-  }
+    // Form submit event when clicking Sign In button
+    // Email and password required validation
+    // Return error if username or password is incorrect from apide
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let err = {};
 
+    if (!values.emailAddress) {
+      err.emailAddress = "Email address is required.";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.emailAddress)
+    ) {
+      err.emailAddress = "Email address is invalid.";
+    }
+
+    if (!values.password) {
+      err.password = "Password is required";
+    }
+    setErrors(err);
+    if (Object.keys(err).length === 0) {
+      const login = () => {
+        const { from } = props.location.state || { from: { pathname: "/" } };
+        context.actions
+          .signIn(values.emailAddress, values.password)
+          .then(() => history.push(from))
+          .catch((error) => {
+            if (error === 401) {
+              console.log(error);
+              setApiError({
+                message:
+                  "Your email addresss or password was entered incorrectly. Try again.",
+              });
+            } else {
+              history.push("/error");
+            }
+          });
+      };
+      login();
+    }
+  };
+
+  // click cancel button will turn back to courses
   const handleCancel = () => {
     history.push("/");
   };
@@ -54,7 +72,7 @@ export const SignInPage = (props) => {
         <h2>Sign In</h2>
         <div>
           {apiError && <p className="validation--errors">{apiError.message}</p>}
-          <form onSubmit={handleSubmit} noValidate>
+          <form>
             <div>
               <label htmlFor="emailAddress">Email Address</label>
               <input
@@ -84,7 +102,7 @@ export const SignInPage = (props) => {
               )}
             </div>
             <div className="pad-bottom">
-              <button className="button" type="submit">
+              <button className="button" type="submit" onClick={handleSubmit}>
                 Sign In
               </button>
               <button
@@ -98,7 +116,7 @@ export const SignInPage = (props) => {
         </div>
         <p>
           Don't have a user account? Click here to
-          <Link to="/sign-up"> sign up</Link>!
+          <Link to="/signup"> sign up</Link>!
         </p>
       </div>
     </main>

@@ -34,14 +34,14 @@ class Database {
     return this.context
       .execute(`
         INSERT INTO Users
-          (firstName, lastName, emailAddress, password, createdAt, updatedAt)
+          (firstName, lastName, emailAddress, confirmedPassword, createdAt, updatedAt)
         VALUES
           (?, ?, ?, ?, datetime('now'), datetime('now'));
       `,
       user.firstName,
       user.lastName,
       user.emailAddress,
-      user.password);
+      user.confirmedPassword);
   }
 
   createCourse(course) {
@@ -63,8 +63,8 @@ class Database {
     const usersWithHashedPasswords = [];
 
     for (const user of users) {
-      const hashedPassword = await bcryptjs.hash(user.password, 10);
-      usersWithHashedPasswords.push({ ...user, password: hashedPassword });
+      const hashedPassword = await bcryptjs.hash(user.confirmedPassword, 10);
+      usersWithHashedPasswords.push({ ...user, confirmedPassword: hashedPassword });
     }
 
     return usersWithHashedPasswords;
@@ -101,7 +101,7 @@ class Database {
         firstName VARCHAR(255) NOT NULL DEFAULT '', 
         lastName VARCHAR(255) NOT NULL DEFAULT '', 
         emailAddress VARCHAR(255) NOT NULL DEFAULT '' UNIQUE, 
-        password VARCHAR(255) NOT NULL DEFAULT '', 
+        confirmedPassword VARCHAR(255) NOT NULL DEFAULT '', 
         createdAt DATETIME NOT NULL, 
         updatedAt DATETIME NOT NULL
       );

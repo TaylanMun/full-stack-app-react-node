@@ -1,13 +1,14 @@
 import React from "react";
-
+// Show error display if backend validation returns
 export const ErrorDisplay = ({ errors }) => {
   let errorsDisplay = null;
   if (errors.length) {
     errorsDisplay = (
-      <div>
-        <ul className="validation--errors">
+      <div className="validation--errors">
+        <h3>Validation Errors</h3>
+        <ul>
           {errors.map((error, i) => (
-            <ul key={i}>{error}</ul>
+            <li key={i}>{error}</li>
           ))}
         </ul>
       </div>
@@ -16,3 +17,5 @@ export const ErrorDisplay = ({ errors }) => {
 
   return errorsDisplay;
 };
+
+

@@ -2,15 +2,16 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Header } from "./components/Header";
 import {
-  CoursesPage,
-  CourseDetailsPage,
-  CreateCoursePage,
-  UpdateCoursePage,
-  SignUpPage,
-  SignInPage,
-  ErrorPage,
-  ForbiddenPage,
-  NotFoundPage,
+  Courses,
+  CourseDetail,
+  CreateCourse,
+  UpdateCourse,
+  UserSignUp,
+  UserSignIn,
+  UserSignOut,
+  Error,
+  Forbidden,
+  NotFound,
 } from "./pages";
 import { PrivateRoute } from "./routes/PrivateRoute";
 
@@ -20,24 +21,25 @@ function App() {
       <div>
         <Header />
         <Switch>
-          <Route exact path="/" component={CoursesPage} />
+          <Route exact path="/" component={Courses} />
           <PrivateRoute
             exact
             path="/courses/create"
-            component={CreateCoursePage}
+            component={CreateCourse}
           />
-          <Route exact path="/courses/:id" component={CourseDetailsPage} />
+          <Route exact path="/courses/:id" component={CourseDetail} />
           <PrivateRoute
             exact
             path="/courses/:id/update"
-            component={UpdateCoursePage}
+            component={UpdateCourse}
           />
-          <Route exact path="/sign-in" component={SignInPage} />
-          <Route exact path="/sign-up" component={SignUpPage} />
-          <Route path="/error" component={ErrorPage} />
-          <Route path="/forbidden" component={ForbiddenPage} />
-          <Route paht="/not-found" component={NotFoundPage} />
-          <Route component={NotFoundPage} />
+          <Route exact path="/signin" component={UserSignIn} />
+          <Route exact path="/signup" component={UserSignUp} />
+          <Route exact path="/signout" component={UserSignOut} />
+          <Route path="/error" component={Error} />
+          <Route path="/forbidden" component={Forbidden} />
+          <Route paht="/notfound" component={NotFound} />
+          <Route component={NotFound} />
         </Switch>
       </div>
     </BrowserRouter>

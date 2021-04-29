@@ -18,6 +18,7 @@ Node Js, Express Js, REST APIS, SQL ORM Sequelize project.This project includes 
 - CRUD operations with sequelize
 - Validation
 - Basic Authentication
+- Password Verification
 - Basic Relational Database
 - Global Error
 

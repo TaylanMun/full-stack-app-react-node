@@ -1,34 +1,31 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { useForm } from "../../hooks/useForm";
 import { ErrorDisplay } from "../../components/ErrorDisplay";
 import { AuthContext } from "../../context/context";
 import { createCourse } from "../../apis";
 
-export const CreateCoursePage = () => {
-  const [apiError, setApiError] = useState([]);
-  const validation = (values) => {
-    let errors = {};
-  
-    if (!values.title) {
-      errors.title = "Title is required.";
-    }
-  
-    if (!values.description) {
-      errors.description = "Description is required.";
-    }
-  
-    return errors;
-  };
-  
-  const { values, errors, handleChange, handleSubmit } = useForm(
-    handleCreateCourse,
-    validation
-  );
+export const CreateCourse = () => {
+  // take login user
   const authState = useContext(AuthContext);
   const history = useHistory();
 
-  function handleCreateCourse() {
+  // initial state
+  const [apiError, setApiError] = useState([]);
+  const [values, setValues] = useState({});
+
+  // take input values
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+
+  // Form submit event when clicking Create Course button
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // take course information from the values state
     const course = {
       title: values.title,
       userId: authState.authUser.id,
@@ -47,8 +44,9 @@ export const CreateCoursePage = () => {
           history.push("/error");
         }
       });
-  }
+  };
 
+  // click cancel button will turn back to courses
   const handleCancel = () => {
     history.push("/");
   };
@@ -70,7 +68,6 @@ export const CreateCoursePage = () => {
                 value={values.title || ""}
                 onChange={handleChange}
               />
-              {errors.title && <p className="validation--errors-spesific">{errors.title}</p>}
 
               <label htmlFor="courseAuthor">Course Author</label>
               <input
@@ -88,9 +85,6 @@ export const CreateCoursePage = () => {
                 value={values.description || ""}
                 onChange={handleChange}
               />
-              {errors.description && (
-               <p className="validation--errors-spesific">{errors.description}</p>
-              )}
             </div>
             <div>
               <label htmlFor="estimatedTime">Estimated Time</label>

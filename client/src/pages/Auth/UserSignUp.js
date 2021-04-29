@@ -1,58 +1,35 @@
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useForm } from "../../hooks/useForm";
 import { createUser } from "../../apis";
 import { ErrorDisplay } from "../../components/ErrorDisplay";
 import { AuthContext } from "../../context/context";
 
-export const SignUpPage = () => {
-
-  const validation = (values) => {
-    let errors = {};
-  
-    if (!values.firstName) {
-      errors.firstName = "First name is required.";
-    }
-  
-    if (!values.lastName) {
-      errors.lastName = "Last name is required.";
-    }
-  
-    if (!values.emailAddress) {
-      errors.emailAddress = "Email address is required.";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.emailAddress)) {
-      errors.emailAddress = "Email address is invalid.";
-    }
-  
-    if (!values.firstPassword) {
-      errors.firstPassword = "Password is required.";
-    } else if (values.firstPassword.length < 6) {
-      errors.firstPassword = "Password must be 6 or more characters.";
-    }
-  
-    if (!values.secondPassword) {
-      errors.secondPassword = "Confirm Password is required.";
-    } else if (values.secondPassword !== values.firstPassword) {
-      errors.secondPassword = "Passwords does not match.";
-    }
-  
-    return errors;
-  };
-
+export const UserSignUp = () => {
+  // initial state
+  const [values, setValues] = useState({});
   const [apiError, setApiError] = useState([]);
-  const { values, errors, handleChange, handleSubmit } = useForm(
-    handleCreateUser,
-    validation
-  );
   const context = useContext(AuthContext);
   const history = useHistory();
 
-  function handleCreateUser() {
+  // take input values
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+  
+  // create user process
+  const handleCreateUser = (e) => {
+    e.preventDefault();
+        // take user information from the values state
     const user = {
       firstName: values.firstName,
       lastName: values.lastName,
       emailAddress: values.emailAddress,
-      password: values.secondPassword,
+      password: values.firstPassword,
+      confirmedPassword: values.secondPassword,
     };
 
     createUser(user)
@@ -79,7 +56,8 @@ export const SignUpPage = () => {
         }
       });
   }
-
+  
+  // click cancel button will turn back to courses
   const handleCancel = () => {
     history.push("/");
   };
@@ -90,7 +68,7 @@ export const SignUpPage = () => {
         <h2>Sign Up</h2>
         <div>
           <ErrorDisplay errors={apiError} />
-          <form onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleCreateUser} noValidate>
             <div>
               <label htmlFor="firstName">First Name</label>
               <input
@@ -100,9 +78,6 @@ export const SignUpPage = () => {
                 value={values.firstName || ""}
                 onChange={handleChange}
               />
-              {errors.firstName && (
-                <p className="validation--errors-spesific">{errors.firstName}</p>
-              )}
             </div>
             <div>
               <label htmlFor="lastName">Last Name</label>
@@ -113,9 +88,6 @@ export const SignUpPage = () => {
                 value={values.lastName || ""}
                 onChange={handleChange}
               />
-              {errors.lastName && (
-                <p className="validation--errors-spesific">{errors.lastName}</p>
-              )}
             </div>
             <div>
               <label htmlFor="emailAddress">Email Address</label>
@@ -126,9 +98,6 @@ export const SignUpPage = () => {
                 value={values.emailAddress || ""}
                 onChange={handleChange}
               />
-              {errors.emailAddress && (
-                <p className="validation--errors-spesific">{errors.emailAddress}</p>
-              )}
             </div>
             <div>
               <label htmlFor="firstPasswords-spesific">Password</label>
@@ -139,9 +108,6 @@ export const SignUpPage = () => {
                 value={values.firstPassword || ""}
                 onChange={handleChange}
               />
-              {errors.firstPassword && (
-                <p className="validation--errors-spesific">{errors.firstPassword}</p>
-              )}
             </div>
             <div>
               <label htmlFor="secondPassword">Confirm Password</label>
@@ -152,9 +118,6 @@ export const SignUpPage = () => {
                 value={values.secondPassword || ""}
                 onChange={handleChange}
               />
-              {errors.secondPassword && (
-                <p className="validation--errors-spesific">{errors.secondPassword}</p>
-              )}
             </div>
             <div className="pad-bottom">
               <button className="button" type="submit">
@@ -171,7 +134,7 @@ export const SignUpPage = () => {
         </div>
         <p>
           Already have a user account? Click here to
-          <Link to="/sign-in"> sign in</Link>!
+          <Link to="/signin"> sign in</Link>!
         </p>
       </div>
     </main>

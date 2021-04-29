@@ -1,14 +1,15 @@
 // Course page
-export { CoursesPage } from "./Courses/CoursesPage";
-export { CourseDetailsPage } from "./Courses/CourseDetailsPage";
-export { CreateCoursePage } from "./Courses/CreateCoursePage";
-export { UpdateCoursePage } from "./Courses/UpdateCoursePage";
+export { Courses } from "./Courses/Courses";
+export { CourseDetail } from "./Courses/CourseDetail";
+export { CreateCourse } from "./Courses/CreateCourse";
+export { UpdateCourse } from "./Courses/UpdateCourse";
 
 // Auth page
-export { SignUpPage } from "./Auth/SignUpPage";
-export { SignInPage } from "./Auth/SignInPage";
+export { UserSignUp } from "./Auth/UserSignUp";
+export { UserSignIn } from "./Auth/UserSignIn";
+export { UserSignOut } from "./Auth/UserSignOut";
 
 // Error page
-export { NotFoundPage } from "./Errors/NotFoundPage";
-export { ForbiddenPage } from "./Errors/ForbiddenPage";
-export { ErrorPage } from "./Errors/ErrorPage";
+export { NotFound } from "./Errors/NotFound";
+export { Forbidden } from "./Errors/Forbidden";
+export { Error } from "./Errors/Error";

@@ -4,19 +4,19 @@
       "firstName": "Joe",
       "lastName": "Smith",
       "emailAddress": "joe@smith.com",
-      "password": "joepassword"
+      "confirmedPassword": "joepassword"
     },
     {
       "firstName": "Sally",
       "lastName": "Jones",
       "emailAddress": "sally@jones.com",
-      "password": "sallypassword"
+      "confirmedPassword": "sallypassword"
     }, 
     {
       "firstName": "Test",
       "lastName": "User",
       "emailAddress": "test@test.com",
-      "password": "testuser"
+      "confirmedPassword": "testuser"
     }
   ],
   "courses": [

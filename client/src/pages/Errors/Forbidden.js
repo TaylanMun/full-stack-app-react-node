@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ForbiddenPage = () => {
+export const Forbidden = () => {
   return (
     <main>
       <div className="wrap">

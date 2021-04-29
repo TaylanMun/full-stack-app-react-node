@@ -1,14 +1,9 @@
 import React, { useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/context";
 
 export const Header = () => {
   const authState = useContext(AuthContext);
-  const history = useHistory();
-  const handleSignOut = () => {
-    authState.actions.signOut();
-    history.push("/sign-in");
-  };
 
   return (
     <header>
@@ -22,18 +17,15 @@ export const Header = () => {
             {authState.authUser ? (
               <li className="header--signedout ">
                 <span>{`Welcome ${authState.authUser.firstName} ${authState.authUser.lastName}!  `}</span>
-
-                <a href="#/" role="button" onClick={handleSignOut}>
-                  Sign Out
-                </a>
+                <Link to="/signout">Sign Out</Link>
               </li>
             ) : (
               <>
                 <li>
-                  <Link to="/sign-up">Sign Up</Link>
+                  <Link to="/signup">Sign Up</Link>
                 </li>
                 <li>
-                  <Link to="/sign-in">Sign In</Link>
+                  <Link to="/signin">Sign In</Link>
                 </li>
               </>
             )}

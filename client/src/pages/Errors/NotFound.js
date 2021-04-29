@@ -1,6 +1,6 @@
 import React from "react";
 
-export const NotFoundPage = () => {
+export const NotFound = () => {
   return (
     <main>
       <div className="wrap">

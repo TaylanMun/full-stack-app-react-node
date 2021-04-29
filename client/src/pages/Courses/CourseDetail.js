@@ -5,14 +5,18 @@ import { CourseDetails } from "../../components/course";
 import { AuthContext } from "../../context/context";
 import { deleteCourse } from "../../apis";
 
-export const CourseDetailsPage = () => {
+export const CourseDetail = () => {
   const { id } = useParams();
+  // initial state
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
-  const [course, setCourse] = useState();
-  const [status, setStatus] = useState();
+  const [error, setError] = useState(false);
+  const [course, setCourse] = useState(null);
+  const [status, setStatus] = useState(null);
+
+  // take login user, can see delete and update buttons if it is her/his own course
   const { authUser } = useContext(AuthContext);
 
+    // When id arrives, it receives relevant course information
   useEffect(() => {
     getCourse(id)
       .then((response) => {
@@ -44,6 +48,7 @@ export const CourseDetailsPage = () => {
     history.push("/error");
   }
 
+  // course deletion process 
   const handleDelete = () => {
     if (authUser && authUser.id === course.user.id) {
       deleteCourse(course.id, authUser)
@@ -65,7 +70,7 @@ export const CourseDetailsPage = () => {
       {isLoading ? null : (
         <>
           {course === null ? (
-            <Redirect to="/not-found" />
+            <Redirect to="/notfound" />
           ) : (
             <>
               <div className="actions--bar">

@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getCourses } from "../../apis";
 import { CourseList } from "../../components/course";
-import { AuthContext } from "../../context/context";
 
-export const CoursesPage = () => {
+export const Courses = () => {
+  // initial state
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
   const [courses, setCourses] = useState();
-  const { authUser } = useContext(AuthContext);
 
+  //gets all the lessons when the page loads
   useEffect(() => {
     getCourses()
       .then((response) => {
@@ -34,6 +34,7 @@ export const CoursesPage = () => {
   }, []);
 
   const history = useHistory();
+  
   if (error) {
     history.push("/error");
   }
@@ -41,7 +42,7 @@ export const CoursesPage = () => {
     <main>
       <div className="wrap main--grid">
         <CourseList isLoading={isLoading} courses={courses} />
-        {authUser && !isLoading ? (
+        {!isLoading ? (
         <Link to="/courses/create">
           <div className="course--module course--add--module">
             <span className="course--add--title">

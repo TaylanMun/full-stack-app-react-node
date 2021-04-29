@@ -1,24 +1,40 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Redirect, useHistory, useParams } from "react-router-dom";
-import { useForm } from "../../hooks/useForm";
 import { getCourse, updateCourse } from "../../apis";
 import { ErrorDisplay } from "../../components/ErrorDisplay";
 import { AuthContext } from "../../context/context";
 
-export const UpdateCoursePage = () => {
+
+export const UpdateCourse = () => {
+  // take login user
   const { authUser } = useContext(AuthContext);
   const { id } = useParams();
+  const history = useHistory();
 
+  // initial state
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
-  const [course, setCourse] = useState();
-  const [status, setStatus] = useState();
-
+  const [course, setCourse] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [apiError, setApiError] = useState([]);
+  const [error, setError] = useState([]);
+  const [values, setValues] = useState({});
+  
+  // take input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+  
+  // When id arrives, it receives relevant course information
   useEffect(() => {
     getCourse(id)
       .then((response) => {
         if (response.status === 200) {
           setCourse(response.data);
+          setValues(response.data);
           setStatus(200);
           setIsLoading(false);
         } else {
@@ -40,34 +56,15 @@ export const UpdateCoursePage = () => {
       });
   }, [id]);
 
-  const history = useHistory();
 
   if (error && status === 500) {
     history.push("/error");
   }
 
-  const [apiError, setApiError] = useState([]);
-  const validation = (values) => {
-    let errors = {};
-
-    if (!values.title) {
-      errors.title = "Title is required.";
-    }
-
-    if (!values.description) {
-      errors.description = "Description is required.";
-    }
-
-    return errors;
-  };
-
-  const { values, errors, handleChange, handleSubmit } = useForm(
-    handleUpdateCourse,
-    validation,
-    course
-  );
-
-  function handleUpdateCourse() {
+  // Form submit event when clicking Update Course button
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // take new course information from the values state
     const updatedCourse = {
       title: values.title,
       id: authUser.id,
@@ -75,6 +72,7 @@ export const UpdateCoursePage = () => {
       estimatedTime: values.estimatedTime,
       materialsNeeded: values.materialsNeeded,
     };
+
 
     updateCourse(id, updatedCourse, authUser)
       .then(() => history.push(`/courses/${course.id}`))
@@ -84,13 +82,14 @@ export const UpdateCoursePage = () => {
         } else if (error.status === 403) {
           history.push("/forbidden");
         } else if (error.status === 404) {
-          history.push("/not-found");
+          history.push("/notfound");
         } else {
           history.push("/error");
         }
       });
   }
 
+  // click cancel button will turn back to course detail
   const handleCancel = () => {
     history.push(`/courses/${course.id}`);
   };
@@ -100,7 +99,7 @@ export const UpdateCoursePage = () => {
       {isLoading ? null : (
         <>
           {course === null ? (
-            <Redirect to="/not-found" />
+            <Redirect to="/notfound" />
           ) : (
             <>
               {course.user.id !== authUser.id ? (
@@ -120,11 +119,7 @@ export const UpdateCoursePage = () => {
                           value={values.title}
                           onChange={handleChange}
                         />
-                        {errors.title && (
-                          <p className="validation--errors-spesific">
-                            {errors.title}
-                          </p>
-                        )}
+                      
 
                         <label htmlFor="courseAuthor">Course Author</label>
                         <input
@@ -142,11 +137,7 @@ export const UpdateCoursePage = () => {
                           value={values.description}
                           onChange={handleChange}
                         />
-                        {errors.description && (
-                          <p className="validation--errors-spesific">
-                            {errors.description}
-                          </p>
-                        )}
+
                       </div>
                       <div>
                         <label htmlFor="estimatedTime">Estimated Time</label>

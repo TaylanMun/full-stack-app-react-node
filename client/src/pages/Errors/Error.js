@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ErrorPage = () => {
+export const Error = () => {
   return (
     <main>
       <div className="wrap">
