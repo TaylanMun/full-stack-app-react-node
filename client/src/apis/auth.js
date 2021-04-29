@@ -1,6 +1,11 @@
 import axios from "axios";
 
-//posts new user
+/**
+ * posts new user data to backend
+ *
+ * @param {Object} user
+ * @returns {Promise}
+ */
 export const createUser = (user) => {
   return new Promise((resolve, reject) => {
     axios
@@ -18,7 +23,13 @@ export const createUser = (user) => {
   });
 };
 
-// get user
+/**
+ * Get logged in user information to backend
+ *
+ * @param {string} email as username in basic auth
+ * @param {string} password
+ * @returns {Promise} user data
+ */
 export const getUser = (email, password) => {
   return new Promise((resolve, reject) => {
     axios

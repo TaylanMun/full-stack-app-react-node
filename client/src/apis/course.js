@@ -1,6 +1,12 @@
 import axios from "axios";
 
-//post new course
+/**
+ * posts new course data to backend with credential
+ *
+ * @param {Object} course
+ * @param {Object} user
+ * @returns {Promise}
+ */
 export const createCourse = (course, user) => {
   return new Promise((resolve, reject) => {
     axios
@@ -24,7 +30,13 @@ export const createCourse = (course, user) => {
   });
 };
 
-// send delete course
+/**
+ * send delete request to course to backend with credential
+ *
+ * @param {number} id course id
+ * @param {Object} user
+ * @returns {Promise}
+ */
 export const deleteCourse = (id, user) => {
   return new Promise((resolve, reject) => {
     axios
@@ -48,7 +60,11 @@ export const deleteCourse = (id, user) => {
   });
 };
 
-// get all courses
+/**
+ * get all courses data to backend
+ *
+ * @returns {Promise}
+ */
 export const getCourses = async () => {
   return new Promise((resolve, reject) =>
     axios
@@ -66,7 +82,12 @@ export const getCourses = async () => {
   );
 };
 
-//  get course details with id
+/**
+ * get course details with given course id from courses api
+ *
+ * @param {number} courseId
+ * @returns {Promise}
+ */
 export const getCourse = (courseId) => {
   return new Promise((resolve, reject) =>
     axios
@@ -85,7 +106,14 @@ export const getCourse = (courseId) => {
 };
 
 
-// update course with id
+/**
+ * Update a course with user credential
+ *
+ * @param {number} id
+ * @param {Object} course
+ * @param {Object} user
+ * @returns {Promise}
+ */
 export const updateCourse = (id, course, user) => {
   return new Promise((resolve, reject) => {
     axios
